@@ -17,6 +17,8 @@ export class Blog {
   @Column({ default: false })
   isPublished: boolean;
   
+  @Column({ length: 255, nullable: true })
+  image: string;
   // @ManyToOne(() => User, (user) => user.id)
   // author: User;
 

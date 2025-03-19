@@ -16,6 +16,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES') },
       }),
+      // JwtModule.register({
+      //   secret: 'secretKey',
+      //   signOptions: { expiresIn: '1h' },
+      // }),
     }),
   ],
   controllers: [BlogController],

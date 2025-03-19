@@ -10,6 +10,7 @@ export class BlogController {
   @Post()
   async create(@Request() req, @Body() body: { title: string; content: string; author: string }) {
     const { id, username } = req.user;
+    console.log(username)
     return this.blogService.create(body.title, body.content, body.author);
   }
 
@@ -23,11 +24,13 @@ export class BlogController {
     return this.blogService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   async update(@Param('id') id: number, @Body() body: { title: string; content: string; isPublished: boolean }) {
     return this.blogService.update(id, body.title, body.content, body.isPublished);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: number) {
     return this.blogService.delete(id);
