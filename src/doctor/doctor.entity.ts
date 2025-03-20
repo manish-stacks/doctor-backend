@@ -5,12 +5,12 @@ export class Doctor {
     @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
     id: number;
 
-    @Column({ type: 'varchar', length: 255 })
+    @Column({ type: 'varchar'})
     name: string;
-    
+
     @Index()
     @Column({ type: 'bigint', unsigned: true, nullable: true })
-    treatment_id: number;
+    treatmentId: number;
 
     @Index()
     @Column({ type: 'bigint', unsigned: true, nullable: true })
@@ -21,14 +21,14 @@ export class Doctor {
     expertiseId: number;
 
     @Index()
-    @Column({ type: 'varchar', length: 255, nullable: true })
+    @Column({ type: 'varchar', nullable: true })
     hospitalId: string;
 
     @Index()
     @Column({ type: 'bigint', unsigned: true })
     userId: number;
 
-    @Column({ type: 'varchar', length: 255 })
+    @Column({ type: 'varchar' })
     image: string;
 
     @Column({ type: 'text', nullable: true })
@@ -40,26 +40,26 @@ export class Doctor {
     @Column({ type: 'text', nullable: true })
     certificate: string;
 
-    @Column({ type: 'varchar', length: 255, nullable: true })
+    @Column({ type: 'varchar', nullable: true })
     appointmentFees: string;
 
-    @Column({ type: 'varchar', length: 255, nullable: true })
+    @Column({ type: 'varchar', nullable: true })
     experience: string;
 
     @Column({ type: 'varchar', length: 100, nullable: true })
     timeSlot: string;
 
-    @Column({ type: 'varchar', length: 255 })
+    @Column({ type: 'varchar', length: 100 })
     dob: string;
 
-    @Column({ type: 'varchar', length: 255 })
+    @Column({ type: 'varchar', length: 50 })
     gender: string;
 
-    @Column({ type: 'varchar', length: 255, nullable: true })
-    startTime: string;
+    // @Column({ type: 'varchar', nullable: true })
+    // startTime: string;
 
-    @Column({ type: 'varchar', length: 255, nullable: true })
-    endTime: string;
+    // @Column({ type: 'varchar', nullable: true })
+    // endTime: string;
 
     @Column({ type: 'text' })
     since: string;
@@ -77,7 +77,7 @@ export class Doctor {
     customTimeSlot: number;
 
     @Column({ type: 'tinyint', default: 0 })
-    patient_vcall: number;
+    patientVideoCall: number;
 
     @CreateDateColumn()
     createdAt: Date;
