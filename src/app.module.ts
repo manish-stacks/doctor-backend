@@ -4,6 +4,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { BlogModule } from './blog/blog.module';
 import { DoctorModule } from './doctor/doctor.module';
+import { AppointmentModule } from './appointment/appointment.module';
+import { CategoryModule } from './category/category.module';
+import { DoctorSubscriptionModule } from './doctor_subscription/doctor_subscription.module';
+import { SubscriptionModule } from './subscription/subscription.module';
+import { MedicineModule } from './medicine/medicine.module';
 
 @Module({
   imports: [
@@ -25,6 +30,11 @@ import { DoctorModule } from './doctor/doctor.module';
     AuthModule,
     BlogModule,
     DoctorModule,
+    AppointmentModule,
+    CategoryModule,
+    DoctorSubscriptionModule,
+    SubscriptionModule,
+    MedicineModule,
   ],
 })
 export class AppModule {}
