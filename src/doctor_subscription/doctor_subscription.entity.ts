@@ -25,7 +25,7 @@ export class DoctorSubscription {
     @Column({ type: 'varchar', length: 255, nullable: true })
     paymentType: string;
 
-    @Column({ length: 100, nullable: true })
+    @Column({ type: 'int', nullable: true })
     amount: number;
 
     @Column({ type: 'varchar', length: 255, nullable: true })

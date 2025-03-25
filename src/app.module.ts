@@ -9,6 +9,18 @@ import { CategoryModule } from './category/category.module';
 import { DoctorSubscriptionModule } from './doctor_subscription/doctor_subscription.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { MedicineModule } from './medicine/medicine.module';
+import { ExpertiseModule } from './expertise/expertise.module';
+import { TreatmentsModule } from './treatments/treatments.module';
+import { HospitalModule } from './hospital/hospital.module';
+import { MedicineCategoryModule } from './medicine_category/medicine_category.module';
+import { PrescriptionModule } from './prescription/prescription.module';
+import { ReportModule } from './report/report.module';
+import { UserAddressModule } from './user_address/user_address.module';
+import { VideocallHistoryModule } from './videocall_history/videocall_history.module';
+import { WorkingHourModule } from './working_hour/working_hour.module';
+import { ZoomMeetingModule } from './zoom_meeting/zoom_meeting.module';
+import { FavoriteModule } from './favorite/favorite.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [
@@ -35,6 +47,18 @@ import { MedicineModule } from './medicine/medicine.module';
     DoctorSubscriptionModule,
     SubscriptionModule,
     MedicineModule,
+    ExpertiseModule,
+    TreatmentsModule,
+    HospitalModule,
+    MedicineCategoryModule,
+    PrescriptionModule,
+    ReportModule,
+    UserAddressModule,
+    VideocallHistoryModule,
+    WorkingHourModule,
+    ZoomMeetingModule,
+    FavoriteModule,
+    ReviewModule,
   ],
 })
 export class AppModule {}
