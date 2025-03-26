@@ -6,11 +6,26 @@ import { File as MulterFile } from 'multer';
 import streamifier from 'streamifier';
 
 export const CloudinaryConfig = (configService: ConfigService): Options => {
+    const cloudName = configService.get<string>('CLOUDINARY_CLOUD_NAME');
+    const apiKey = configService.get<string>('CLOUDINARY_API_KEY');
+    const apiSecret = configService.get<string>('CLOUDINARY_API_SECRET');
+
+    if (!cloudName || !apiKey || !apiSecret) {
+        console.error('Missing Cloudinary configuration:', {
+            cloudName,
+            apiKey,
+            apiSecret,
+        });
+        throw new Error('Cloudinary configuration is incomplete. Please check your environment variables.');
+    }
+
     cloudinary.config({
-        cloud_name: configService.get<string>('CLOUDINARY_CLOUD_NAME'),
-        api_key: configService.get<string>('CLOUDINARY_API_KEY'),
-        api_secret: configService.get<string>('CLOUDINARY_API_SECRET'),
+        cloud_name: cloudName,
+        api_key: apiKey,
+        api_secret: apiSecret,
     });
+
+    console.log('Cloudinary Config:', { cloudName, apiKey, apiSecret });
 
     return {
         storage: new CloudinaryStorage({
@@ -18,19 +33,19 @@ export const CloudinaryConfig = (configService: ConfigService): Options => {
             params: {
                 folder: 'categories',
                 allowedFormats: ['jpg', 'png', 'jpeg', 'webp'],
-            } as any, 
+            } as any,
         }),
     };
 };
 
-
 export const uploadImage = async (file: MulterFile): Promise<string> => {
     try {
-        console.log('Uploading file:', file.originalname);
+        console.log('Uploading file:', file);
+        
 
         return new Promise((resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
-                { folder: 'your-folder-name' }, // Optional: Specify folder
+                { folder: 'category' },
                 (error, result) => {
                     if (error) {
                         console.error('Cloudinary Upload Error:', error);
@@ -59,8 +74,8 @@ export const uploadImage = async (file: MulterFile): Promise<string> => {
 //         }
 
 //         const result = await cloudinary.uploader.upload(tempFilePath);
-//         fs.unlinkSync(tempFilePath); 
-//         return result.url; 
+//         fs.unlinkSync(tempFilePath);
+//         return result.url;
 //     } catch (error) {
 //         console.error('Error uploading image to Cloudinary:', error.message);
 //         throw new Error('Failed to upload image to Cloudinary');

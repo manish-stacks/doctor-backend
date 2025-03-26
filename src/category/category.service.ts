@@ -16,7 +16,8 @@ export class CategoryService {
 
     async create(createCategoryDto: CreateCategoryDto, file?: MulterFile): Promise<Category> { 
         if (file) {
-            createCategoryDto.image = await uploadImage(file); 
+            const mage = await uploadImage(file); 
+            console.log(mage)
         }
         const category = this.categoryRepository.create(createCategoryDto);
         return await this.categoryRepository.save(category);

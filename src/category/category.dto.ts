@@ -6,8 +6,7 @@ export class CreateCategoryDto {
     name: string;
 
     @IsString()
-    @IsNotEmpty()
-    @IsUrl()
+    @IsOptional()
     image: string;
 
     @IsBoolean()
@@ -22,7 +21,6 @@ export class UpdateCategoryDto {
 
     @IsString()
     @IsOptional()
-    @IsUrl()
     image?: string;
 
     @IsBoolean()
