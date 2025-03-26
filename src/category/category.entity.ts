@@ -11,9 +11,6 @@ export class Category {
     @Column()
     image: string;
 
-    @Column({ type: 'bigint', unsigned: true })
-    treatmentId: number;
-
     @Column({ type: 'tinyint', default: 1 })
     isActive: boolean;
 

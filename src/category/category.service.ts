@@ -2,12 +2,26 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './category.entity';
 import { Repository } from 'typeorm';
-
+import { CreateCategoryDto } from './category.dto';
+import { ConfigService } from '@nestjs/config';
+import { File as MulterFile } from 'multer'; 
+import { uploadImage } from '../config/cloudinary.config'; 
 @Injectable()
 export class CategoryService {
 
-    constructor(@InjectRepository(Category)
-    private categoryRepository: Repository<Category>) { }
+    constructor(
+        @InjectRepository(Category)
+        private categoryRepository: Repository<Category>,
+    ) { }
+
+    async create(createCategoryDto: CreateCategoryDto, file?: MulterFile): Promise<Category> { 
+        if (file) {
+            createCategoryDto.image = await uploadImage(file); 
+        }
+        const category = this.categoryRepository.create(createCategoryDto);
+        return await this.categoryRepository.save(category);
+    }
+
 
     async findAll() {
         return this.categoryRepository.find();
@@ -17,14 +31,11 @@ export class CategoryService {
         return this.categoryRepository.findOne({ where: { id } });
     }
 
-    async findByTreatmentId(id: number) {
-        return this.categoryRepository.find({ where: { treatmentId: id } });
-    }
+    // async findByTreatmentId(id: number) {
+    //     return this.categoryRepository.find({ where: { treatmentId: id } });
+    // }
 
-    async create(name: string, image: string, treatmentId: number, isActive: boolean) {
-        const category = this.categoryRepository.create({ name, image, treatmentId, isActive });
-        return this.categoryRepository.save(category);
-    }
+
 
     async update(id: number, category: { name: string; image: string; treatmentId: number; isActive: boolean; }) {
         const categoryToUpdate = await this.categoryRepository.findOne({ where: { id } });
@@ -32,7 +43,7 @@ export class CategoryService {
         else {
             categoryToUpdate.name = category.name;
             categoryToUpdate.image = category.image;
-            categoryToUpdate.treatmentId = category.treatmentId;
+            // categoryToUpdate.treatmentId = category.treatmentId;
             categoryToUpdate.isActive = category.isActive;
             return this.categoryRepository.save(categoryToUpdate);
         }
