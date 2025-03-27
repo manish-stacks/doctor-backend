@@ -1,11 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './category.entity';
 import { Repository } from 'typeorm';
 import { CreateCategoryDto } from './category.dto';
 import { ConfigService } from '@nestjs/config';
-import { File as MulterFile } from 'multer'; 
-import { uploadImage } from '../config/cloudinary.config'; 
+import { File as MulterFile } from 'multer';
+import { UploadApiResponse } from 'cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
+import * as fs from 'fs';
+import { deleteFromCloudinary, uploadToCloudinary } from 'src/helper/cloudinary.helper';
+// import { uploadImage } from '../config/cloudinary.config'; 
 @Injectable()
 export class CategoryService {
 
@@ -14,10 +18,10 @@ export class CategoryService {
         private categoryRepository: Repository<Category>,
     ) { }
 
-    async create(createCategoryDto: CreateCategoryDto, file?: MulterFile): Promise<Category> { 
-        if (file) {
-            const mage = await uploadImage(file); 
-            console.log(mage)
+    async create(createCategoryDto: CreateCategoryDto, filePath?: string): Promise<Category> {
+        if (filePath) {
+            const result = await uploadToCloudinary(filePath);
+            createCategoryDto.image = result.secure_url;
         }
         const category = this.categoryRepository.create(createCategoryDto);
         return await this.categoryRepository.save(category);
@@ -37,8 +41,21 @@ export class CategoryService {
     // }
 
 
+    async update(id: number, createCategoryDto: Category, filePath?: string) {
+        const category = await this.categoryRepository.findOne({ where: { id } });
+        if (!category) throw new NotFoundException('Category not found');
 
-    async update(id: number, category: { name: string; image: string; treatmentId: number; isActive: boolean; }) {
+        if (filePath) {
+            if (category.image) {
+                await deleteFromCloudinary(category.image);
+            }
+            const uploadResult = await uploadToCloudinary(filePath);
+            category.image = uploadResult.secure_url;
+        }
+        category.name = createCategoryDto.name;
+        return this.categoryRepository.save(category);
+    }
+    async fdfad(id: number, category: { name: string; image: string; treatmentId: number; isActive: boolean; }) {
         const categoryToUpdate = await this.categoryRepository.findOne({ where: { id } });
         if (!categoryToUpdate) return 'Category not found';
         else {
@@ -53,8 +70,7 @@ export class CategoryService {
     async delete(id: number) {
         const category = await this.categoryRepository.findOne({ where: { id } });
         if (!category) return 'Category not found';
-        else {
-            return this.categoryRepository.remove(category);
-        }
+        await deleteFromCloudinary(category.image);
+        return this.categoryRepository.remove(category);
     }
 }

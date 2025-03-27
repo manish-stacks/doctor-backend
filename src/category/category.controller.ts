@@ -3,46 +3,79 @@ import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './category.dto';
 import { Category } from './category.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Multer } from 'multer'; 
+import { Multer } from 'multer';
+import { multerOptions } from 'src/config/multer.config';
 
 
 @Controller('category')
 export class CategoryController {
     constructor(
         private readonly categoryService: CategoryService,
-    ) {}
+    ) { }
 
     @Get()
     async findAll() {
-        return this.categoryService.findAll();
+        const categories = await this.categoryService.findAll();
+        return {
+            success: true,
+            message: 'Categories fetched successfully',
+            data: categories,
+        };
     }
 
     @Post()
-    @UseInterceptors(FileInterceptor('image'))
+    @UseInterceptors(FileInterceptor('image', multerOptions))
     async create(
         @Body() createCategoryDto: CreateCategoryDto,
-        @UploadedFile() file?: Multer.File 
-    ): Promise<Category> {
-        return this.categoryService.create(createCategoryDto, file);
+        @UploadedFile() file?: Multer.File
+    ) {
+        if (!file) {
+            throw new Error('No file uploaded');
+        }
+        const category = await this.categoryService.create(createCategoryDto, file.path);
+        return {
+            success: true,
+            message: 'Category created successfully',
+            data: category,
+        };
     }
 
     @Get(':id')
     async findOne(@Param('id') id: number) {
-        return this.categoryService.findOne(id);
+        const category = await this.categoryService.findOne(id);
+        return {
+            success: true,
+            message: 'Category fetched successfully',
+            data: category,
+        }
     }
 
-    // @Get('treatment/:id')
-    // async findByTreatmentId(@Param('id') id: number) {
-    //     return this.categoryService.findByTreatmentId(id);
-    // }
-    
+
+
     @Put(':id')
-    async update(@Param('id') id: number, @Body() body: { name: string; image: string; treatmentId: number; isActive: boolean; }) {
-        return this.categoryService.update(id, { name: body.name, image: body.image, treatmentId: body.treatmentId, isActive: body.isActive });
+    @UseInterceptors(FileInterceptor('image', multerOptions))
+    async update(
+        @Param('id') id: number,
+        @Body() createCategoryDto: Category,
+        @UploadedFile() file?: Multer.File
+    ) {
+        const updatedUser = await this.categoryService.update(id, createCategoryDto, file?.path);
+        return {
+            success: true,
+            message: 'Category updated successfully',
+            data: updatedUser,
+        };
+
     }
+
 
     @Delete(':id')
     async delete(@Param('id') id: number) {
-        return this.categoryService.delete(id);
+        const deletedUser = await this.categoryService.delete(id);
+        return {
+            success: true,
+            message: 'Category deleted successfully',
+            data: deletedUser,
+        }
     }
 }
