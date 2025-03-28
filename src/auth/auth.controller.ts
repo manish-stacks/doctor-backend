@@ -1,19 +1,21 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Post, Get, Body, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { CreateUserDto } from 'src/user/user.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('register')
-  register(@Body() body: { email: string; username: string; password: string }) {
-    return this.authService.register(body.email, body.username, body.password);
+  register(@Body() createUserDto: CreateUserDto) {
+    return this.authService.register(createUserDto);
   }
 
   @Post('login')
-  login(@Body() body: { email: string; password: string }) {
-    return this.authService.login(body.email, body.password);
+  login(@Body() createUserDto: CreateUserDto) {
+    return this.authService.login(createUserDto);
   }
 
   @UseGuards(JwtAuthGuard)

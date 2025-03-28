@@ -1,7 +1,9 @@
+/* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Doctor } from './doctor.entity';
 import { Repository } from 'typeorm';
+import { DoctorDto } from './doctor.dto';
 
 @Injectable()
 export class DoctorService {
@@ -9,12 +11,9 @@ export class DoctorService {
     private doctorRepository: Repository<Doctor>
     ) { }
 
-    async create(name: string, treatmentId: number, categoryId: number, expertiseId: number, hospitalId: string, userId: number, image: string, desc: string, education: string, certificate: string, appointmentFees: string, experience: string, timeSlot: string,
-        dob: string, gender: string) {
-        const doctor = this.doctorRepository.create({
-            name, treatmentId, categoryId, expertiseId, hospitalId, userId, image, desc, education, certificate, appointmentFees, experience, timeSlot,
-            dob, gender
-        });
+    async create(doctorDto: DoctorDto) {
+        console.log(doctorDto)
+        const doctor = this.doctorRepository.create(doctorDto);
         return this.doctorRepository.save(doctor);
     }
 
@@ -27,27 +26,15 @@ export class DoctorService {
         if (!doctor) throw new NotFoundException('Doctor not found');
         return doctor;
     }
-    async update(id: number, name: string, treatmentId: number, categoryId: number, expertiseId: number, hospitalId: string, userId: number, image: string, desc: string, education: string, certificate: string, appointmentFees: string, experience: string, timeSlot: string,
-        dob: string, gender: string) {
+
+    async update(id: number, doctorDto: DoctorDto) {
         const doctor = await this.doctorRepository.findOne({ where: { id } });
         if (!doctor) throw new NotFoundException('Doctor not found');
-        doctor.name = name;
-        doctor.treatmentId = treatmentId;
-        doctor.categoryId = categoryId;
-        doctor.expertiseId = expertiseId;
-        doctor.hospitalId = hospitalId;
-        doctor.userId = userId;
-        doctor.image = image;
-        doctor.desc = desc;
-        doctor.education = education;
-        doctor.certificate = certificate;
-        doctor.appointmentFees = appointmentFees;
-        doctor.experience = experience;
-        doctor.timeSlot = timeSlot;
-        doctor.dob = dob;
-        doctor.gender = gender;
+        
+        Object.assign(doctor, doctorDto);
         return this.doctorRepository.save(doctor);
     }
+
     async remove(id: number) {
         const doctor = await this.doctorRepository.findOne({ where: { id } });
         if (!doctor) throw new NotFoundException('Doctor not found');

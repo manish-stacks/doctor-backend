@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -9,7 +10,6 @@ import { CategoryModule } from './category/category.module';
 import { DoctorSubscriptionModule } from './doctor_subscription/doctor_subscription.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { MedicineModule } from './medicine/medicine.module';
-import { ExpertiseModule } from './expertise/expertise.module';
 import { TreatmentsModule } from './treatments/treatments.module';
 import { HospitalModule } from './hospital/hospital.module';
 import { MedicineCategoryModule } from './medicine_category/medicine_category.module';
@@ -47,7 +47,7 @@ import { ReviewModule } from './review/review.module';
     DoctorSubscriptionModule,
     SubscriptionModule,
     MedicineModule,
-    ExpertiseModule,
+    
     TreatmentsModule,
     HospitalModule,
     MedicineCategoryModule,

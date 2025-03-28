@@ -1,13 +1,10 @@
+/* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './category.entity';
 import { Repository } from 'typeorm';
 import { CreateCategoryDto } from './category.dto';
-import { ConfigService } from '@nestjs/config';
-import { File as MulterFile } from 'multer';
-import { UploadApiResponse } from 'cloudinary';
-import { v2 as cloudinary } from 'cloudinary';
-import * as fs from 'fs';
+
 import { deleteFromCloudinary, uploadToCloudinary } from 'src/helper/cloudinary.helper';
 // import { uploadImage } from '../config/cloudinary.config'; 
 @Injectable()
